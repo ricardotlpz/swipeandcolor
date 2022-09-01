@@ -1,0 +1,78 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+    font-family: Arial;
+  }
+  
+  .header {
+    text-align: center;
+    padding: 32px;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 4px;
+  }
+  
+  /* Create four equal columns that sits next to each other */
+  .column {
+    flex: 25%;
+    max-width: 25%;
+    padding: 0 4px;
+  }
+  
+  .column img {
+    margin-top: 8px;
+    vertical-align: middle;
+  }
+  
+  /* Responsive layout - makes a two column-layout instead of four columns */
+  @media (max-width: 800px) {
+    .column {
+      flex: 50%;
+      max-width: 50%;
+    }
+  }
+  
+  /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+  @media (max-width: 600px) {
+    .column {
+      flex: 100%;
+      max-width: 100%;
+    }
+  }
+  /* Makes everything black and white and on hover gives color */
+  img {
+      filter: grayscale(100%);
+      -webkit-filter: grayscale(100%);
+      transition: filter 0.5s ease-in-out;
+
+  }
+
+  img:hover {
+      filter: none;
+      -webkit-filter: grayscale(0);
+      transition: filter 0.5s ease-in-out;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 250px);
+    gap: 10px;
+    justify-content: center;
+
+    margin: 0 auto;
+}
+
+.grid-item {
+    width: 250px;
+    height: auto;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: zoom-in;
+    background-color: lightgray;
+}
