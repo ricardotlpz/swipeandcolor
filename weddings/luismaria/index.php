@@ -12,9 +12,14 @@
 <style>
 body {font-family: "Lato", sans-serif}
 .mySlides {display: none}
+
+.img-container {
+  text-align: center;
+}
 </style>
 
 </head>
+<title>Swipe and Color</title>
 <body>
 
 <!-- Navbar -->
@@ -22,17 +27,7 @@ body {font-family: "Lato", sans-serif}
   <div class="w3-bar w3-black w3-card">
     <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
     <a href="../../index.html" class="w3-bar-item w3-button w3-padding-large">HOME</a>
-    <a href="../../pricing.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small">PRICING</a>
-    <div class="w3-dropdown-hover w3-hide-small">
-      <!--
-      <button class="w3-padding-large w3-button" title="More">MORE <i class="fa fa-caret-down"></i></button>     
-      <div class="w3-dropdown-content w3-bar-block w3-card-4">
-        <a href="#" class="w3-bar-item w3-button">Button1</a>
-        <a href="#" class="w3-bar-item w3-button">Button2</a>
-        <a href="#" class="w3-bar-item w3-button">Button3</a>
-      </div>
-      -->
-    </div>
+    <!-- <a href="../../pricing.php" class="w3-bar-item w3-button w3-padding-large w3-hide-small">PRICING</a> -->
   </div>
 </div>
 
@@ -47,21 +42,26 @@ body {font-family: "Lato", sans-serif}
 
   <!-- The Portfolio Section -->
   <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="weddings">
-    <h2 class="w3-wide">OUR EXPERIENCE</h2>
-    <p class="w3-opacity"><i>Professional photographers</i></p>
-    <p class="w3-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-      Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <h2 class="w3-wide">PHOTO ALBUM</h2>
+    <!-- <p class="w3-opacity"><i>Instructions</i></p> -->
+    <p class="w3-justify">
+      <h5 class="w3-wide">
+        To download a high resolution version of the image, click the download button on the bottom of the opened image.
+        <br><br> 
+        To download all the images, click the following button
+        <br><br>
+      </h5>
+      <div class="img-container"> 
+          <img src="download_all_button.png" alt="Download all the photos in this album" style= "max-width: 50%; height: auto" onclick="downloadAll()" >
+      </div>
+      <br>
   </div>
 
 <!-- Here goes the images -->
   <?php
-  #$fi = new FilesystemIterator("../../showoff_images", FilesystemIterator::SKIP_DOTS);
-  #printf("There were %d Files", iterator_count($fi));
-  #$fi = iterator_count($fi);
 
-    $directory="../../showoff_images/";
+
+    $directory="album/";
     $images=glob($directory . "*.jpg");
     $lazyload = "lazy";
     $divclass = "grid-item";
@@ -97,14 +97,27 @@ body {font-family: "Lato", sans-serif}
 
   <!-- Lets images go fullscreen -->
   <script type="text/javascript" >
+    currentfolder = location.pathname;
+    currentfolder = currentfolder.split('/')[2]
+          
         $('img[data-enlargeable]').addClass('img-enlargeable').click(function() {
+          var http = 'https://swipe-color-photo-albums.s3.us-east-2.amazonaws.com/' + currentfolder + '/';
           var src = $(this).attr('src');
           var modal;
             
           function removeModal() {
             modal.remove();
             $('body').off('keyup.modal-close');
+            closeicon.remove();
           }
+
+          function linkToDownload(){
+            src = src.split('/')[1];
+            down = http + src
+            window.open(down);
+          }
+          
+
           modal = $('<div>').css({
             background: 'RGBA(0,0,0,.5) url(' + src + ') no-repeat center',
             backgroundSize: 'contain',
@@ -124,20 +137,38 @@ body {font-family: "Lato", sans-serif}
               removeModal();
             }
           });
+
+          closeicon = $('<div>').css({
+            background: 'rgba(0,0,0,0) url(download_button.png) no-repeat center',
+            backgroundSize: 'contain',
+            width: '100%',
+            'max-width': '396px',
+            'max-height': '144px',
+            height: '100%',
+            position: 'fixed',
+            zIndex: '20000',
+            bottom: '50px',
+            right: '50%',
+            marginRight: '-198px',
+            cursor: 'pointer'
+          }).click(function() {
+            linkToDownload();
+          }).appendTo('body');
         });
   </script> 
 
-  <!-- Creates button -->
   <script>
-    let btn = document.createElement("button");
-    btn.innerHTML = "Submit";
-    btn.onclick = function () {
-      createbutton("Button is clicked");
-    };
-    document.body.appendChild(btn);
-  </script>
 
-  <script>
+function downloadAll()
+  {
+    currentfolder = location.pathname;
+    currentfolder = currentfolder.split('/')[2]
+    var http = 'https://swipe-color-photo-albums.s3.us-east-2.amazonaws.com/' + currentfolder + '/';
+
+    down = http + "album.zip"
+    window.open(down);
+  }
+
   // Used to toggle the menu on small screens when clicking on the menu button
   function myFunction() {
     var x = document.getElementById("navDemo");
